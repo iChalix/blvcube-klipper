@@ -10,17 +10,20 @@ This repository contains the Klipper configuration for a custom BLV Cube CoreXY 
   - Z Board: Dedicated Z-axis control
   - Aux Board: Heaters and temperature management
 - **Stepper Drivers**: TMC2130 with sensorless homing (X/Y axes)
-- **Z-Axis**: Triple independent Z motors with automatic tilt adjustment
-- **Bed Leveling**: 5x5 mesh with BLTouch probe
+- **Z-Axis**: Dual independent Z motors with automatic tilt adjustment
+- **Bed Leveling**: 20x20 high-resolution mesh with Cartographer3D scanning probe
+- **Accelerometer**: ADXL345 for input shaping and resonance compensation
 
 ## Features
 
 - Sensorless homing on X and Y axes
-- Automatic Z-tilt adjustment for bed tramming
-- Bed mesh compensation with bicubic interpolation
+- Cartographer3D scanning probe for high-precision bed sensing
+- Automatic Z-tilt adjustment for bed tramming (2-point leveling)
+- High-resolution 20x20 bed mesh with bicubic interpolation
 - PID-controlled bed and hotend heating
 - Pressure advance calibration
-- Input shaping for resonance compensation
+- Input shaping with ADXL345 accelerometer for resonance compensation
+- Optimized TMC2130 drivers with interpolation and StealthChop
 - Fluidd web interface integration
 
 ## Installation
@@ -43,13 +46,16 @@ This repository contains the Klipper configuration for a custom BLV Cube CoreXY 
 
 Before first use, calibrate the following:
 
-1. **Z-Offset**: Run `PROBE_CALIBRATE` to set the correct nozzle-to-bed distance
-2. **PID Tuning**: 
+1. **Cartographer Probe**: Run `CARTOGRAPHER_CALIBRATE` to calibrate the scanning probe
+2. **Z-Offset**: Run `PROBE_CALIBRATE` to set the correct nozzle-to-bed distance
+3. **PID Tuning**:
    - Hotend: `PID_CALIBRATE HEATER=extruder TARGET=240`
    - Bed: `PID_CALIBRATE HEATER=heater_bed TARGET=60`
-3. **Bed Mesh**: Run `BED_MESH_CALIBRATE` to create a bed mesh profile
-4. **Z-Tilt**: Run `Z_TILT_ADJUST` to level the bed using three Z motors
-5. **Pressure Advance**: Follow Klipper's pressure advance tuning guide
+4. **Z-Tilt**: Run `Z_TILT_ADJUST` to level the bed using two Z motors
+5. **Bed Mesh**: Run `BED_MESH_CALIBRATE` to create a high-resolution 20x20 bed mesh profile
+6. **Input Shaping**: Run `SHAPER_CALIBRATE` to optimize resonance compensation with ADXL345
+7. **E-Steps**: Calibrate extruder steps (rotation_distance = 3.89 is a starting point)
+8. **Pressure Advance**: Follow Klipper's pressure advance tuning guide
 
 ## Usage
 
@@ -81,9 +87,9 @@ Before first use, calibrate the following:
 - Ensure proper motor wiring and belt tension
 
 ### Z-Tilt Problems
-- Verify all three Z motors are connected to the correct pins
-- Check that Z endstop is functioning properly
-- Ensure bed mounting allows for slight movement
+- Verify both Z motors are connected to the correct pins
+- Check that Cartographer probe is functioning properly
+- Ensure bed mounting allows for slight movement during tilt adjustment
 
 ### Temperature Fluctuations
 - Re-run PID calibration for the affected heater
