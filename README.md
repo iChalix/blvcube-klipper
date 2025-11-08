@@ -2,25 +2,39 @@
 
 This repository contains the Klipper configuration for a custom BLV Cube CoreXY 3D printer.
 
+**Current Version: v1.2.0 (2025-11-08)**
+
+## Documentation
+
+- **[RELEASES.md](RELEASES.md)** - User-friendly release notes with upgrade guides
+- **[CHANGELOG.md](CHANGELOG.md)** - Detailed changelog following semantic versioning
+- **[CLAUDE.md](CLAUDE.md)** - AI assistant integration guide
+
 ## Hardware Overview
 
 - **Kinematics**: CoreXY
-- **Control Boards**: 3x Arduino Mega 2560 (RAMPS 1.4)
-  - Main MCU: X/Y motion and primary functions
-  - Z Board: Dedicated Z-axis control
-  - Aux Board: Heaters and temperature management
+- **Control Boards**: 4x Microcontrollers
+  - Main MCU: Arduino Mega 2560 - X/Y motion and primary functions
+  - Z Board: Arduino Mega 2560 - Dedicated Z-axis control
+  - Aux Board: Arduino Mega 2560 - Heaters and temperature management
+  - Cartographer: Dedicated probe controller with ADXL345 accelerometer
 - **Stepper Drivers**: TMC2130 with sensorless homing (X/Y axes)
 - **Z-Axis**: Triple independent Z motors with automatic tilt adjustment
-- **Bed Leveling**: 5x5 mesh with BLTouch probe
+- **Bed Leveling**: 20x20 high-resolution mesh with Cartographer3D probe
 
 ## Features
 
 - Sensorless homing on X and Y axes
 - Automatic Z-tilt adjustment for bed tramming
-- Bed mesh compensation with bicubic interpolation
+- High-resolution bed mesh (20x20) with bicubic interpolation
+- Cartographer3D touch and scanning probe
+- Axis twist compensation for improved accuracy across build plate
+- Z backlash compensation for precise layer positioning
+- Skew correction for dimensional accuracy
+- Advanced input shaping (3hump_ei @ 123Hz X, zv @ 61Hz Y)
+- ADXL345 accelerometer for automatic resonance calibration
 - PID-controlled bed and hotend heating
 - Pressure advance calibration
-- Input shaping for resonance compensation
 - Fluidd web interface integration
 
 ## Installation
